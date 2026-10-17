@@ -1,0 +1,387 @@
+import Link from "next/link";
+import { ArrowDown, ArrowUpRight, MapPin, ShieldCheck, ScanLine, Layers3 } from "lucide-react";
+import { pageMetadata } from "@/lib/seo";
+import { Eyebrow, ServiceCards, Process, FAQ, CTABand } from "@/components/sections";
+import { ImagePlaceholder } from "@/components/image-placeholder";
+import { QuoteButton, PhoneButton } from "@/components/actions";
+import { Reveal } from "@/components/reveal";
+import { homeImages } from "@/data/gallery";
+import { projects } from "@/data/projects";
+
+export const metadata = pageMetadata(
+  "Dacharbeiten in Wien",
+  "Dacheindeckung, Dachreparatur, Dachabdichtung, Dachsanierung und weitere Dachleistungen in Wien. Entdecken Sie Rundrdach und fragen Sie Ihr Projekt an.",
+);
+
+export default function HomePage() {
+  // Homepage preview: three finished results that link into the portfolio.
+  const previewCards = projects.length
+    ? projects.slice(0, 3).map((project) => ({
+        key: project.slug,
+        src: project.image,
+        alt: project.alt,
+        objectPosition: project.objectPosition,
+        meta: project.service + (project.location ? " · " + project.location : ""),
+        title: project.title,
+        description: project.description,
+        href: "/referenzen#" + project.slug,
+      }))
+    : homeImages.preview.map((photo) => ({
+        key: photo.id,
+        src: photo.src,
+        alt: photo.alt,
+        objectPosition: photo.objectPosition,
+        meta: photo.caption,
+        title: photo.caption,
+        description: undefined as string | undefined,
+        href: "/referenzen",
+      }));
+
+  return (
+    <>
+      <section className="home-hero">
+        <div className="container hero-grid">
+          <div className="hero-copy">
+            <Eyebrow>RUND UM IHR DACH. IN WIEN.</Eyebrow>
+            <h1>
+              Dacharbeiten
+              <br />
+              in Wien.
+              <br />
+              <span className="muted-line">Klar geplant. Sorgfältig umgesetzt.</span>
+            </h1>
+            <p className="hero-description">
+              Rundrdach ist Ihr Ansprechpartner für Dacharbeiten in Wien: von der{" "}
+              <Link href="/dacheindeckung">Dacheindeckung</Link> über{" "}
+              <Link href="/dachreparatur">Reparatur</Link> und{" "}
+              <Link href="/dachabdichtung">Abdichtung</Link> bis zur{" "}
+              <Link href="/dachsanierung">Sanierung</Link>. Wir betrachten Dachhaut, Anschlüsse und
+              Entwässerung gemeinsam – und erklären Ihnen verständlich, was Ihr Gebäude braucht. Der nächste Schritt
+              beginnt mit einem Gespräch oder einem Anruf.
+            </p>
+            <div className="hero-buttons">
+              <QuoteButton location="home-hero" label="Projekt anfragen" />
+              <PhoneButton location="home-hero" />
+            </div>
+            <Link href="#leistungen" className="hero-scroll">
+              <span>
+                <ArrowDown size={16} />
+              </span>
+              UNSERE LEISTUNGEN ENTDECKEN
+            </Link>
+          </div>
+          <div className="hero-visual">
+            {/* Primary finished-house photo — LCP hero with higher quality and preload. */}
+            <ImagePlaceholder
+              src={homeImages.hero.src}
+              alt={homeImages.hero.alt}
+              className="hero-placeholder hero-photo-main"
+              sizes="(max-width: 760px) 100vw, 48vw"
+              preload
+              quality={85}
+              objectPosition={homeImages.hero.objectPosition}
+            />
+            {/* Secondary craft photo stacked for a photographic, less template-like hero. */}
+            <div className="hero-photo-secondary">
+              <ImagePlaceholder
+                src={homeImages.heroSecondary.src}
+                alt={homeImages.heroSecondary.alt}
+                className="hero-placeholder-secondary"
+                sizes="(max-width: 760px) 40vw, 18vw"
+                quality={75}
+                objectPosition={homeImages.heroSecondary.objectPosition}
+              />
+            </div>
+            <div className="location-label">
+              <MapPin size={18} />
+              <div>
+                <strong>Hier zu Hause.</strong>
+                <span>Wien, Österreich</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div className="value-strip">
+        <div className="container">
+          <div>
+            <ScanLine size={23} strokeWidth={1.4} />
+            <span>Das Dach als Ganzes betrachten.</span>
+          </div>
+          <div>
+            <Layers3 size={23} strokeWidth={1.4} />
+            <span>Die passende Ausführung planen.</span>
+          </div>
+          <div>
+            <ShieldCheck size={23} strokeWidth={1.4} />
+            <span>Auf die Details achten.</span>
+          </div>
+        </div>
+      </div>
+
+      <section id="leistungen" className="section services-section">
+        <div className="container">
+          <Reveal>
+            <div className="section-header">
+              <div>
+                <Eyebrow>UNSERE LEISTUNGEN</Eyebrow>
+                <h2>
+                  Vier Kernbereiche.
+                  <br />
+                  Ein Blick fürs Ganze.
+                </h2>
+              </div>
+              <p>
+                Ob neues Dach, einzelne Reparatur oder eine neue Abdichtung: Hier beginnt Ihr Projekt in Wien. Jede
+                Leistung führt zu einer eigenen Seite mit Ablauf, Details und häufigen Fragen.
+              </p>
+            </div>
+          </Reveal>
+          <Reveal>
+            <ServiceCards />
+          </Reveal>
+          <div className="services-hub-link">
+            <Link href="/leistungen" className="text-link">
+              Alle Leistungen und Spezialthemen <ArrowUpRight size={17} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Vienna-specific reading section for on-page SEO and trust. */}
+      <section className="section vienna-section">
+        <div className="container vienna-grid">
+          <Reveal>
+            <div>
+              <Eyebrow>DACHARBEITEN IN WIEN</Eyebrow>
+              <h2>
+                Wiener Dächer.
+                <br />
+                Vielfältig – und anspruchsvoll.
+              </h2>
+            </div>
+          </Reveal>
+          <Reveal delay={80}>
+            <div className="vienna-copy">
+              <p>
+                In Wien prägen Steildächer aus der Gründerzeit und späteren Epochen ganze Straßenzüge. Ziegeldeckungen,
+                Gauben und sorgfältige Anschlüsse an Kamine und Dachfenster bestimmen das Bild – und den Unterhalt. Mit
+                den Jahrzehnten kommen Undichtigkeiten, alternde Unterspannbahnen oder beschädigte Firste hinzu. Eine
+                gezielte <Link href="/dachreparatur">Dachreparatur</Link> kann oft ausreichen; manchmal ist eine
+                umfassendere <Link href="/dachsanierung">Dachsanierung</Link> die nachhaltigere Lösung.
+              </p>
+              <p>
+                Daneben stehen Flachdächer auf Wohn- und Gewerbebauten. Hier zählt vor allem die{" "}
+                <Link href="/dachabdichtung">Abdichtung</Link>: Wasser muss kontrolliert abfließen, Anschlüsse an
+                Attika und Durchdringungen müssen dicht bleiben. Entwässerung und Spenglerarbeiten gehören dazu – Rinnen,
+                Fallrohre und Blechdetails schützen Fassade und Bausubstanz.
+              </p>
+              <p>
+                Sturm, Hagel und starke Niederschläge belasten jedes Dach. Wer Schäden früh erkennt, vermeidet Folgekosten
+                im Innenraum. Ob Neueindeckung, lokale Instandsetzung oder eine Beratung zum nächsten Schritt: Wir
+                besprechen Ihr Vorhaben verständlich und planen die Ausführung passend zu Gebäude und Dachform.{" "}
+                <Link href="/dacheindeckung">Mehr zur Dacheindeckung</Link> und zu allen weiteren Leistungen finden Sie
+                auf den jeweiligen Seiten – oder direkt im Gespräch mit uns.
+              </p>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* Four-image craft band from real project photos. */}
+      <section className="section craft-band-section">
+        <div className="container">
+          <Reveal>
+            <div className="section-header">
+              <div>
+                <Eyebrow>HANDWERK IM BILD</Eyebrow>
+                <h2>Material und Detail.</h2>
+              </div>
+              <p>
+                Einblicke in Deckung, Metall, Abdichtung und Spenglerarbeiten – aus ausgeführten Projekten, ohne
+                gestellte Stockfotos.
+              </p>
+            </div>
+          </Reveal>
+          <div className="craft-band-grid">
+            {homeImages.craftBand.map((item, i) => (
+              <Reveal key={item.photo.id} delay={i * 70}>
+                <article className="craft-band-card">
+                  <ImagePlaceholder
+                    src={item.photo.src}
+                    alt={item.photo.alt}
+                    className="craft-band-image"
+                    sizes="(max-width: 760px) 100vw, 25vw"
+                    objectPosition={item.photo.objectPosition}
+                  />
+                  <h3>{item.title}</h3>
+                  <p>{item.text}</p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section approach-section">
+        <div className="container approach-grid">
+          <Reveal>
+            {/* Detail photo for the craftsmanship section — lazy-loaded below the fold. */}
+            <ImagePlaceholder
+              src={homeImages.approach.src}
+              alt={homeImages.approach.alt}
+              number="02"
+              className="approach-image"
+              sizes="(max-width: 760px) 100vw, 45vw"
+              objectPosition={homeImages.approach.objectPosition}
+            />
+          </Reveal>
+          <Reveal delay={90}>
+            <div className="approach-copy">
+              <Eyebrow>DER RUNDRDACH ANSATZ</Eyebrow>
+              <h2>
+                Nicht nur oben drauf.
+                <br />
+                Bis ins Detail.
+              </h2>
+              <p className="large-copy">
+                Ein gutes Dach entsteht im Zusammenspiel. Dachhaut, Anschlüsse und Entwässerung müssen zusammenpassen.
+                Deshalb schauen wir auf das gesamte Vorhaben – und erklären die Möglichkeiten Schritt für Schritt.
+              </p>
+              <p>
+                Wir besprechen den notwendigen Umfang und planen die Ausführung passend zu Ihrem Gebäude. Verständlich,
+                nachvollziehbar und ohne unnötige Fachsprache. So wissen Sie, worauf Sie sich einlassen, bevor die Arbeit
+                beginnt.
+              </p>
+              <Link href="/kontakt" className="text-link">
+                Ihr Vorhaben besprechen <ArrowUpRight size={17} />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <Process
+        intro={
+          <>
+            Von der ersten Nachricht bis zur fertigen Arbeit:
+            <br />
+            ein Ablauf, den Sie nachvollziehen können.
+          </>
+        }
+      />
+
+      {/* Service area — Vienna only, no invented district claims. */}
+      <section className="section area-section">
+        <div className="container area-grid">
+          <Reveal>
+            <div>
+              <Eyebrow>EINSATZGEBIET</Eyebrow>
+              <h2>
+                Wien.
+                <br />
+                <span className="muted-line">Unser Arbeitsgebiet.</span>
+              </h2>
+            </div>
+          </Reveal>
+          <Reveal delay={80}>
+            <div className="area-copy">
+              <p>
+                Rundrdach ist in Wien für Dacharbeiten erreichbar – in allen Bezirken, sobald die Lage des Gebäudes und
+                die Zugänglichkeit des Dachs geklärt sind. Ob Wohnhaus, Mehrfamilienhaus oder ein kleineres Objekt: Für
+                eine sinnvolle Planung brauchen wir die genaue Adresse. So lassen sich Anfahrt, Gerüst und Ablauf realistisch
+                einschätzen.
+              </p>
+              <p>
+                Beschreiben Sie bei Ihrer Anfrage gerne Bezirk, Dachform und das beobachtete Problem. Fotos vom Boden aus
+                helfen – betreten Sie das Dach dafür bitte nicht selbst. Wir melden uns und klären den nächsten Schritt.
+              </p>
+              <Link href="/kontakt" className="text-link">
+                Jetzt anfragen <ArrowUpRight size={17} />
+              </Link>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="section portfolio-preview">
+        <div className="container">
+          <Reveal>
+            <div className="section-header">
+              <div>
+                <Eyebrow>EINBLICK INS HANDWERK</Eyebrow>
+                <h2>Das Dach im Fokus.</h2>
+              </div>
+              <Link href="/referenzen" className="text-link">
+                Zum Portfolio <ArrowUpRight size={17} />
+              </Link>
+            </div>
+          </Reveal>
+          <div className="portfolio-grid">
+            {previewCards.map((card, i) => (
+              <Reveal key={card.key} delay={i * 60}>
+                <article className="project-card">
+                  <ImagePlaceholder
+                    src={card.src}
+                    alt={card.alt}
+                    number={"0" + (i + 1)}
+                    sizes="(max-width: 760px) 100vw, 33vw"
+                    objectPosition={card.objectPosition}
+                  />
+                  <span>{card.meta}</span>
+                  <h3>{card.title}</h3>
+                  {card.description ? <p>{card.description}</p> : null}
+                  <Link href={card.href} className="text-link">
+                    Mehr im Portfolio <ArrowUpRight size={16} />
+                  </Link>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <FAQ
+        items={[
+          {
+            question: "Welche Dacharbeiten bietet Rundrdach in Wien an?",
+            answer:
+              "Die Website informiert über Dacheindeckung, Dachreparatur, Dachabdichtung und Dachzubehör sowie ergänzende Themen wie Sanierung, Flachdach, Spenglerarbeiten, Wartung, Sturmschäden, Dachfenster und Dämmung. Der konkrete Leistungsumfang für Ihr Vorhaben wird individuell abgestimmt.",
+          },
+          {
+            question: "Wie beginne ich eine Anfrage?",
+            answer:
+              "Beschreiben Sie die Art der Arbeit, die Lage des Gebäudes und die beobachteten Probleme. Sie können das Kontaktformular nutzen, anrufen oder uns über WhatsApp schreiben. Für eine konkrete Einschätzung kann eine Besichtigung erforderlich sein.",
+          },
+          {
+            question: "Kann ich ein Angebot ohne Besichtigung erhalten?",
+            answer:
+              "Erste Angaben helfen bei der Einordnung. Ein belastbares Angebot benötigt jedoch ausreichend Informationen über Zustand, Aufbau und Zugänglichkeit des Dachs.",
+          },
+          {
+            question: "Werden auch bestehende Dächer repariert?",
+            answer:
+              "Eine Reparatur ist bei geeigneten Voraussetzungen möglich. Die Prüfung zeigt, ob eine lokale Maßnahme ausreicht oder weitergehende Arbeiten sinnvoll sind.",
+          },
+          {
+            question: "Ist mein Bezirk in Wien im Einsatzgebiet?",
+            answer:
+              "Das angegebene Einsatzgebiet ist Wien. Beschreiben Sie bei Ihrer Anfrage die Lage des Gebäudes, damit die Möglichkeiten konkret abgestimmt werden können.",
+          },
+          {
+            question: "Wann sollte ich wegen meines Dachs Kontakt aufnehmen?",
+            answer:
+              "Typische Anlässe sind sichtbare Undichtigkeiten, Feuchtigkeitsflecken unter dem Dach, lose oder gebrochene Ziegel, beschädigte Rinnen, Stürme oder der Wunsch nach einer geplanten Neueindeckung bzw. Sanierung. Je früher Sie Bescheid geben, desto besser lassen sich Folgeschäden vermeiden.",
+          },
+          {
+            question: "Was sollte ich vor einer Besichtigung vorbereiten?",
+            answer:
+              "Hilfreich sind die Adresse, Angaben zur Dachform, zum Baujahr soweit bekannt und eine kurze Beschreibung des Problems. Fotos vom Boden oder aus dem Dachboden unterstützen die Vorbereitung. Betreten Sie das Dach bitte nicht selbst – die sichere Begutachtung übernehmen wir vor Ort.",
+          },
+        ]}
+      />
+      <CTABand />
+    </>
+  );
+}
