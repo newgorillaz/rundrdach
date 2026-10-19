@@ -76,11 +76,20 @@ export function ServiceCards({
 }) {
   const list = items.filter((service) => service.slug !== exclude);
   return (
-    <div className={"service-grid" + (list.length > 4 ? " service-grid-wide" : "")}>
+    // data-reveal-group: HomeMotion staggers children; inert on other pages.
+    <div
+      className={"service-grid" + (list.length > 4 ? " service-grid-wide" : "")}
+      data-reveal-group
+    >
       {list.map((service) => {
         const Icon = icons[service.icon];
         return (
-          <Link href={"/" + service.slug} className="service-card" key={service.slug}>
+          <Link
+            href={"/" + service.slug}
+            className="service-card"
+            key={service.slug}
+            data-reveal-item
+          >
             <div className="service-card-top">
               <span className="service-number">{service.number}</span>
               <Icon size={27} strokeWidth={1.3} />
@@ -173,7 +182,7 @@ export function Process({
   return (
     <section className="section process-section">
       <div className="container">
-        <div className="section-header">
+        <div className="section-header" data-reveal>
           <div>
             <Eyebrow>DER WEG ZU IHREM DACH</Eyebrow>
             <h2>
@@ -192,9 +201,11 @@ export function Process({
             )}
           </p>
         </div>
-        <div className="process-grid">
+        {/* data-reveal-group + data-draw: HomeMotion animates steps and border draw. */}
+        <div className="process-grid" data-reveal-group>
           {steps.map((step, i) => (
-            <div key={step.title} className="process-step">
+            <div key={step.title} className="process-step" data-reveal-item>
+              <span className="process-draw" data-draw aria-hidden="true" />
               <span className="step-number">0{i + 1}</span>
               <h3>{step.title}</h3>
               <p>{step.description}</p>
@@ -209,7 +220,9 @@ export function Process({
 export function CTABand({ service = "general" }: { service?: string }) {
   return (
     <section className="cta-band">
-      <div className="container cta-inner">
+      {/* Real element replaces ::after so GSAP can rotate it with scroll. */}
+      <span className="cta-deco" data-rotate aria-hidden="true" />
+      <div className="container cta-inner" data-reveal>
         <div>
           <Eyebrow light>RUND UMS DACH. IN WIEN.</Eyebrow>
           <h2>

@@ -7,10 +7,11 @@ export const site = {
   // Display format for the phone; WhatsApp expects digits only for wa.me.
   phone: "+43 681 20735980",
   whatsapp: "+4368120735980",
-  email: "",
-  street: "",
-  postalCode: "",
-  legalName: "",
+  // Business contact — used in footer, Kontakt, Impressum and schema.
+  email: "Dach2021gmbh@gmail.com",
+  street: "Braunhirschengasse 31/1a",
+  postalCode: "1150",
+  legalName: "R&R Dach Profi GmbH",
   companyNumber: "",
   vatId: "",
   tradeAuthority: "",

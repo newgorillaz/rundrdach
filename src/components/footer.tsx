@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, MapPin, Phone } from "lucide-react";
+import { ArrowUpRight, MapPin, Phone, Mail } from "lucide-react";
 import { Brand } from "@/components/brand";
 import { mainServices, specialistServices } from "@/data/services";
 import { phoneHref, site } from "@/config/site";
@@ -12,6 +12,8 @@ export function Footer() {
         <div className="footer-top">
           <div>
             <Brand light />
+            {/* Legal company name — important for a registered, tax-paying business. */}
+            {site.legalName && <p className="footer-legal-name">{site.legalName}</p>}
             <p>
               Dacharbeiten in Wien.
               <br />
@@ -19,13 +21,21 @@ export function Footer() {
             </p>
             <span className="footer-location">
               <MapPin size={15} />
-              Wien, Österreich
+              {site.street
+                ? site.street + ", " + site.postalCode + " Wien"
+                : "Wien, Österreich"}
             </span>
             {/* Phone number is listed in the footer on every page. */}
             {phoneHref && (
               <a className="footer-phone" href={phoneHref}>
                 <Phone size={15} aria-hidden="true" />
                 {site.phone}
+              </a>
+            )}
+            {site.email && (
+              <a className="footer-email" href={"mailto:" + site.email}>
+                <Mail size={15} aria-hidden="true" />
+                {site.email}
               </a>
             )}
           </div>
@@ -62,7 +72,10 @@ export function Footer() {
           </div>
         </div>
         <div className="footer-bottom">
-          <span>© {new Date().getFullYear()} Rundrdach</span>
+          <span>
+            © {new Date().getFullYear()} {site.legalName || "Rundrdach"}
+            {site.legalName ? " · Rundrdach" : ""}
+          </span>
           <div>
             <Link href="/impressum">Impressum</Link>
             <Link href="/datenschutz">Datenschutz</Link>

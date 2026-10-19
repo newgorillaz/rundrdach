@@ -1,12 +1,14 @@
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight, MapPin, ShieldCheck, ScanLine, Layers3 } from "lucide-react";
+import { ArrowDown, ArrowUpRight, MapPin, ShieldCheck, ScanLine, Layers3, Mail, Phone } from "lucide-react";
 import { pageMetadata } from "@/lib/seo";
 import { Eyebrow, ServiceCards, Process, FAQ, CTABand } from "@/components/sections";
 import { ImagePlaceholder } from "@/components/image-placeholder";
 import { QuoteButton, PhoneButton } from "@/components/actions";
-import { Reveal } from "@/components/reveal";
+import { HomeMotion } from "@/components/home-motion";
+import { SplitLines } from "@/components/split-lines";
 import { homeImages } from "@/data/gallery";
 import { projects } from "@/data/projects";
+import { phoneHref, site } from "@/config/site";
 
 export const metadata = pageMetadata(
   "Dacharbeiten in Wien",
@@ -37,20 +39,34 @@ export default function HomePage() {
         href: "/referenzen",
       }));
 
+  // Marquee phrase — company identity repeated for scroll-driven strip.
+  const marqueePhrase =
+    (site.legalName || "Rundrdach").toUpperCase() +
+    " · DACHARBEITEN IN WIEN · " +
+    (site.street ? site.street.toUpperCase() + ", " + site.postalCode + " WIEN · " : "") +
+    (site.email ? site.email.toUpperCase() + " · " : "");
+
   return (
-    <>
+    <HomeMotion>
       <section className="home-hero">
         <div className="container hero-grid">
           <div className="hero-copy">
-            <Eyebrow>RUND UM IHR DACH. IN WIEN.</Eyebrow>
+            <div data-hero="eyebrow">
+              <Eyebrow>RUND UM IHR DACH. IN WIEN.</Eyebrow>
+            </div>
             <h1>
-              Dacharbeiten
-              <br />
-              in Wien.
-              <br />
-              <span className="muted-line">Klar geplant. Sorgfältig umgesetzt.</span>
+              {/* Masked line reveals — SplitLines wraps each line for GSAP. */}
+              <span data-hero="line">
+                <SplitLines>
+                  Dacharbeiten
+                  <br />
+                  in Wien.
+                  <br />
+                  <span className="muted-line">Klar geplant. Sorgfältig umgesetzt.</span>
+                </SplitLines>
+              </span>
             </h1>
-            <p className="hero-description">
+            <p className="hero-description" data-hero="copy">
               Rundrdach ist Ihr Ansprechpartner für Dacharbeiten in Wien: von der{" "}
               <Link href="/dacheindeckung">Dacheindeckung</Link> über{" "}
               <Link href="/dachreparatur">Reparatur</Link> und{" "}
@@ -59,11 +75,11 @@ export default function HomePage() {
               Entwässerung gemeinsam – und erklären Ihnen verständlich, was Ihr Gebäude braucht. Der nächste Schritt
               beginnt mit einem Gespräch oder einem Anruf.
             </p>
-            <div className="hero-buttons">
+            <div className="hero-buttons" data-hero="buttons">
               <QuoteButton location="home-hero" label="Projekt anfragen" />
               <PhoneButton location="home-hero" />
             </div>
-            <Link href="#leistungen" className="hero-scroll">
+            <Link href="#leistungen" className="hero-scroll" data-hero="scroll">
               <span>
                 <ArrowDown size={16} />
               </span>
@@ -72,17 +88,19 @@ export default function HomePage() {
           </div>
           <div className="hero-visual">
             {/* Primary finished-house photo — LCP hero with higher quality and preload. */}
-            <ImagePlaceholder
-              src={homeImages.hero.src}
-              alt={homeImages.hero.alt}
-              className="hero-placeholder hero-photo-main"
-              sizes="(max-width: 760px) 100vw, 48vw"
-              preload
-              quality={85}
-              objectPosition={homeImages.hero.objectPosition}
-            />
+            <div data-hero="photo" data-parallax="0.12" className="hero-parallax-frame">
+              <ImagePlaceholder
+                src={homeImages.hero.src}
+                alt={homeImages.hero.alt}
+                className="hero-placeholder hero-photo-main"
+                sizes="(max-width: 760px) 100vw, 48vw"
+                preload
+                quality={85}
+                objectPosition={homeImages.hero.objectPosition}
+              />
+            </div>
             {/* Secondary craft photo stacked for a photographic, less template-like hero. */}
-            <div className="hero-photo-secondary">
+            <div className="hero-photo-secondary" data-hero="photo-2" data-parallax="0.2">
               <ImagePlaceholder
                 src={homeImages.heroSecondary.src}
                 alt={homeImages.heroSecondary.alt}
@@ -92,11 +110,16 @@ export default function HomePage() {
                 objectPosition={homeImages.heroSecondary.objectPosition}
               />
             </div>
-            <div className="location-label">
+            {/* Company identity — legal name and address for client visibility. */}
+            <div className="location-label" data-hero="label">
               <MapPin size={18} />
               <div>
-                <strong>Hier zu Hause.</strong>
-                <span>Wien, Österreich</span>
+                <strong>{site.legalName || "Hier zu Hause."}</strong>
+                <span>
+                  {site.street
+                    ? site.street + " · " + site.postalCode + " Wien"
+                    : "Wien, Österreich"}
+                </span>
               </div>
             </div>
           </div>
@@ -104,44 +127,50 @@ export default function HomePage() {
       </section>
 
       <div className="value-strip">
-        <div className="container">
-          <div>
+        <div className="container" data-reveal-group>
+          <div data-reveal-item>
             <ScanLine size={23} strokeWidth={1.4} />
             <span>Das Dach als Ganzes betrachten.</span>
           </div>
-          <div>
+          <div data-reveal-item>
             <Layers3 size={23} strokeWidth={1.4} />
             <span>Die passende Ausführung planen.</span>
           </div>
-          <div>
+          <div data-reveal-item>
             <ShieldCheck size={23} strokeWidth={1.4} />
             <span>Auf die Details achten.</span>
           </div>
         </div>
       </div>
 
+      {/* Scroll-driven company marquee — reinforces legal identity with motion. */}
+      <div className="identity-marquee" aria-hidden="true">
+        <div className="identity-marquee-track" data-marquee>
+          <span>{marqueePhrase}</span>
+          <span>{marqueePhrase}</span>
+        </div>
+      </div>
+
       <section id="leistungen" className="section services-section">
         <div className="container">
-          <Reveal>
-            <div className="section-header">
-              <div>
-                <Eyebrow>UNSERE LEISTUNGEN</Eyebrow>
-                <h2>
+          <div className="section-header" data-reveal>
+            <div>
+              <Eyebrow>UNSERE LEISTUNGEN</Eyebrow>
+              <h2 data-split>
+                <SplitLines>
                   Vier Kernbereiche.
                   <br />
                   Ein Blick fürs Ganze.
-                </h2>
-              </div>
-              <p>
-                Ob neues Dach, einzelne Reparatur oder eine neue Abdichtung: Hier beginnt Ihr Projekt in Wien. Jede
-                Leistung führt zu einer eigenen Seite mit Ablauf, Details und häufigen Fragen.
-              </p>
+                </SplitLines>
+              </h2>
             </div>
-          </Reveal>
-          <Reveal>
-            <ServiceCards />
-          </Reveal>
-          <div className="services-hub-link">
+            <p>
+              Ob neues Dach, einzelne Reparatur oder eine neue Abdichtung: Hier beginnt Ihr Projekt in Wien. Jede
+              Leistung führt zu einer eigenen Seite mit Ablauf, Details und häufigen Fragen.
+            </p>
+          </div>
+          <ServiceCards />
+          <div className="services-hub-link" data-reveal>
             <Link href="/leistungen" className="text-link">
               Alle Leistungen und Spezialthemen <ArrowUpRight size={17} />
             </Link>
@@ -152,62 +181,60 @@ export default function HomePage() {
       {/* Vienna-specific reading section for on-page SEO and trust. */}
       <section className="section vienna-section">
         <div className="container vienna-grid">
-          <Reveal>
-            <div>
-              <Eyebrow>DACHARBEITEN IN WIEN</Eyebrow>
-              <h2>
+          <div data-reveal>
+            <Eyebrow>DACHARBEITEN IN WIEN</Eyebrow>
+            <h2 data-split>
+              <SplitLines>
                 Wiener Dächer.
                 <br />
                 Vielfältig – und anspruchsvoll.
-              </h2>
-            </div>
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="vienna-copy">
-              <p>
-                In Wien prägen Steildächer aus der Gründerzeit und späteren Epochen ganze Straßenzüge. Ziegeldeckungen,
-                Gauben und sorgfältige Anschlüsse an Kamine und Dachfenster bestimmen das Bild – und den Unterhalt. Mit
-                den Jahrzehnten kommen Undichtigkeiten, alternde Unterspannbahnen oder beschädigte Firste hinzu. Eine
-                gezielte <Link href="/dachreparatur">Dachreparatur</Link> kann oft ausreichen; manchmal ist eine
-                umfassendere <Link href="/dachsanierung">Dachsanierung</Link> die nachhaltigere Lösung.
-              </p>
-              <p>
-                Daneben stehen Flachdächer auf Wohn- und Gewerbebauten. Hier zählt vor allem die{" "}
-                <Link href="/dachabdichtung">Abdichtung</Link>: Wasser muss kontrolliert abfließen, Anschlüsse an
-                Attika und Durchdringungen müssen dicht bleiben. Entwässerung und Spenglerarbeiten gehören dazu – Rinnen,
-                Fallrohre und Blechdetails schützen Fassade und Bausubstanz.
-              </p>
-              <p>
-                Sturm, Hagel und starke Niederschläge belasten jedes Dach. Wer Schäden früh erkennt, vermeidet Folgekosten
-                im Innenraum. Ob Neueindeckung, lokale Instandsetzung oder eine Beratung zum nächsten Schritt: Wir
-                besprechen Ihr Vorhaben verständlich und planen die Ausführung passend zu Gebäude und Dachform.{" "}
-                <Link href="/dacheindeckung">Mehr zur Dacheindeckung</Link> und zu allen weiteren Leistungen finden Sie
-                auf den jeweiligen Seiten – oder direkt im Gespräch mit uns.
-              </p>
-            </div>
-          </Reveal>
+              </SplitLines>
+            </h2>
+          </div>
+          <div className="vienna-copy" data-reveal>
+            <p>
+              In Wien prägen Steildächer aus der Gründerzeit und späteren Epochen ganze Straßenzüge. Ziegeldeckungen,
+              Gauben und sorgfältige Anschlüsse an Kamine und Dachfenster bestimmen das Bild – und den Unterhalt. Mit
+              den Jahrzehnten kommen Undichtigkeiten, alternde Unterspannbahnen oder beschädigte Firste hinzu. Eine
+              gezielte <Link href="/dachreparatur">Dachreparatur</Link> kann oft ausreichen; manchmal ist eine
+              umfassendere <Link href="/dachsanierung">Dachsanierung</Link> die nachhaltigere Lösung.
+            </p>
+            <p>
+              Daneben stehen Flachdächer auf Wohn- und Gewerbebauten. Hier zählt vor allem die{" "}
+              <Link href="/dachabdichtung">Abdichtung</Link>: Wasser muss kontrolliert abfließen, Anschlüsse an
+              Attika und Durchdringungen müssen dicht bleiben. Entwässerung und Spenglerarbeiten gehören dazu – Rinnen,
+              Fallrohre und Blechdetails schützen Fassade und Bausubstanz.
+            </p>
+            <p>
+              Sturm, Hagel und starke Niederschläge belasten jedes Dach. Wer Schäden früh erkennt, vermeidet Folgekosten
+              im Innenraum. Ob Neueindeckung, lokale Instandsetzung oder eine Beratung zum nächsten Schritt: Wir
+              besprechen Ihr Vorhaben verständlich und planen die Ausführung passend zu Gebäude und Dachform.{" "}
+              <Link href="/dacheindeckung">Mehr zur Dacheindeckung</Link> und zu allen weiteren Leistungen finden Sie
+              auf den jeweiligen Seiten – oder direkt im Gespräch mit uns.
+            </p>
+          </div>
         </div>
       </section>
 
       {/* Four-image craft band from real project photos. */}
       <section className="section craft-band-section">
         <div className="container">
-          <Reveal>
-            <div className="section-header">
-              <div>
-                <Eyebrow>HANDWERK IM BILD</Eyebrow>
-                <h2>Material und Detail.</h2>
-              </div>
-              <p>
-                Einblicke in Deckung, Metall, Abdichtung und Spenglerarbeiten – aus ausgeführten Projekten, ohne
-                gestellte Stockfotos.
-              </p>
+          <div className="section-header" data-reveal>
+            <div>
+              <Eyebrow>HANDWERK IM BILD</Eyebrow>
+              <h2 data-split>
+                <SplitLines>Material und Detail.</SplitLines>
+              </h2>
             </div>
-          </Reveal>
-          <div className="craft-band-grid">
-            {homeImages.craftBand.map((item, i) => (
-              <Reveal key={item.photo.id} delay={i * 70}>
-                <article className="craft-band-card">
+            <p>
+              Einblicke in Deckung, Metall, Abdichtung und Spenglerarbeiten – aus ausgeführten Projekten, ohne
+              gestellte Stockfotos.
+            </p>
+          </div>
+          <div className="craft-band-grid" data-reveal-group>
+            {homeImages.craftBand.map((item) => (
+              <article key={item.photo.id} className="craft-band-card" data-reveal-item>
+                <div data-parallax="0.14" className="parallax-frame">
                   <ImagePlaceholder
                     src={item.photo.src}
                     alt={item.photo.alt}
@@ -215,10 +242,10 @@ export default function HomePage() {
                     sizes="(max-width: 760px) 100vw, 25vw"
                     objectPosition={item.photo.objectPosition}
                   />
-                  <h3>{item.title}</h3>
-                  <p>{item.text}</p>
-                </article>
-              </Reveal>
+                </div>
+                <h3>{item.title}</h3>
+                <p>{item.text}</p>
+              </article>
             ))}
           </div>
         </div>
@@ -226,8 +253,8 @@ export default function HomePage() {
 
       <section className="section approach-section">
         <div className="container approach-grid">
-          <Reveal>
-            {/* Detail photo for the craftsmanship section — lazy-loaded below the fold. */}
+          {/* Detail photo for the craftsmanship section — lazy-loaded below the fold. */}
+          <div data-reveal data-parallax="0.15" className="parallax-frame">
             <ImagePlaceholder
               src={homeImages.approach.src}
               alt={homeImages.approach.alt}
@@ -236,29 +263,29 @@ export default function HomePage() {
               sizes="(max-width: 760px) 100vw, 45vw"
               objectPosition={homeImages.approach.objectPosition}
             />
-          </Reveal>
-          <Reveal delay={90}>
-            <div className="approach-copy">
-              <Eyebrow>DER RUNDRDACH ANSATZ</Eyebrow>
-              <h2>
+          </div>
+          <div className="approach-copy" data-reveal>
+            <Eyebrow>DER RUNDRDACH ANSATZ</Eyebrow>
+            <h2 data-split>
+              <SplitLines>
                 Nicht nur oben drauf.
                 <br />
                 Bis ins Detail.
-              </h2>
-              <p className="large-copy">
-                Ein gutes Dach entsteht im Zusammenspiel. Dachhaut, Anschlüsse und Entwässerung müssen zusammenpassen.
-                Deshalb schauen wir auf das gesamte Vorhaben – und erklären die Möglichkeiten Schritt für Schritt.
-              </p>
-              <p>
-                Wir besprechen den notwendigen Umfang und planen die Ausführung passend zu Ihrem Gebäude. Verständlich,
-                nachvollziehbar und ohne unnötige Fachsprache. So wissen Sie, worauf Sie sich einlassen, bevor die Arbeit
-                beginnt.
-              </p>
-              <Link href="/kontakt" className="text-link">
-                Ihr Vorhaben besprechen <ArrowUpRight size={17} />
-              </Link>
-            </div>
-          </Reveal>
+              </SplitLines>
+            </h2>
+            <p className="large-copy">
+              Ein gutes Dach entsteht im Zusammenspiel. Dachhaut, Anschlüsse und Entwässerung müssen zusammenpassen.
+              Deshalb schauen wir auf das gesamte Vorhaben – und erklären die Möglichkeiten Schritt für Schritt.
+            </p>
+            <p>
+              Wir besprechen den notwendigen Umfang und planen die Ausführung passend zu Ihrem Gebäude. Verständlich,
+              nachvollziehbar und ohne unnötige Fachsprache. So wissen Sie, worauf Sie sich einlassen, bevor die Arbeit
+              beginnt.
+            </p>
+            <Link href="/kontakt" className="text-link">
+              Ihr Vorhaben besprechen <ArrowUpRight size={17} />
+            </Link>
+          </div>
         </div>
       </section>
 
@@ -272,56 +299,83 @@ export default function HomePage() {
         }
       />
 
-      {/* Service area — Vienna only, no invented district claims. */}
+      {/* Service area — Vienna only, plus Standort card with company identity. */}
       <section className="section area-section">
         <div className="container area-grid">
-          <Reveal>
-            <div>
-              <Eyebrow>EINSATZGEBIET</Eyebrow>
-              <h2>
+          <div data-reveal>
+            <Eyebrow>EINSATZGEBIET</Eyebrow>
+            <h2 data-split>
+              <SplitLines>
                 Wien.
                 <br />
                 <span className="muted-line">Unser Arbeitsgebiet.</span>
-              </h2>
-            </div>
-          </Reveal>
-          <Reveal delay={80}>
-            <div className="area-copy">
-              <p>
-                Rundrdach ist in Wien für Dacharbeiten erreichbar – in allen Bezirken, sobald die Lage des Gebäudes und
-                die Zugänglichkeit des Dachs geklärt sind. Ob Wohnhaus, Mehrfamilienhaus oder ein kleineres Objekt: Für
-                eine sinnvolle Planung brauchen wir die genaue Adresse. So lassen sich Anfahrt, Gerüst und Ablauf realistisch
-                einschätzen.
-              </p>
-              <p>
-                Beschreiben Sie bei Ihrer Anfrage gerne Bezirk, Dachform und das beobachtete Problem. Fotos vom Boden aus
-                helfen – betreten Sie das Dach dafür bitte nicht selbst. Wir melden uns und klären den nächsten Schritt.
-              </p>
-              <Link href="/kontakt" className="text-link">
-                Jetzt anfragen <ArrowUpRight size={17} />
-              </Link>
-            </div>
-          </Reveal>
+              </SplitLines>
+            </h2>
+            {/* Standort card — legal name, address, email for inquiries. */}
+            <aside className="standort-card" data-reveal>
+              <Eyebrow>STANDORT</Eyebrow>
+              <strong className="standort-name">{site.legalName}</strong>
+              <ul className="standort-list">
+                {site.street && (
+                  <li>
+                    <MapPin size={16} aria-hidden="true" />
+                    <span>
+                      {site.street}
+                      <br />
+                      {site.postalCode}, Wien
+                    </span>
+                  </li>
+                )}
+                {site.email && (
+                  <li>
+                    <Mail size={16} aria-hidden="true" />
+                    <a href={"mailto:" + site.email}>{site.email}</a>
+                  </li>
+                )}
+                {phoneHref && (
+                  <li>
+                    <Phone size={16} aria-hidden="true" />
+                    <a href={phoneHref}>{site.phone}</a>
+                  </li>
+                )}
+              </ul>
+            </aside>
+          </div>
+          <div className="area-copy" data-reveal>
+            <p>
+              Rundrdach ist in Wien für Dacharbeiten erreichbar – in allen Bezirken, sobald die Lage des Gebäudes und
+              die Zugänglichkeit des Dachs geklärt sind. Ob Wohnhaus, Mehrfamilienhaus oder ein kleineres Objekt: Für
+              eine sinnvolle Planung brauchen wir die genaue Adresse. So lassen sich Anfahrt, Gerüst und Ablauf realistisch
+              einschätzen.
+            </p>
+            <p>
+              Beschreiben Sie bei Ihrer Anfrage gerne Bezirk, Dachform und das beobachtete Problem. Fotos vom Boden aus
+              helfen – betreten Sie das Dach dafür bitte nicht selbst. Wir melden uns und klären den nächsten Schritt.
+            </p>
+            <Link href="/kontakt" className="text-link">
+              Jetzt anfragen <ArrowUpRight size={17} />
+            </Link>
+          </div>
         </div>
       </section>
 
       <section className="section portfolio-preview">
         <div className="container">
-          <Reveal>
-            <div className="section-header">
-              <div>
-                <Eyebrow>EINBLICK INS HANDWERK</Eyebrow>
-                <h2>Das Dach im Fokus.</h2>
-              </div>
-              <Link href="/referenzen" className="text-link">
-                Zum Portfolio <ArrowUpRight size={17} />
-              </Link>
+          <div className="section-header" data-reveal>
+            <div>
+              <Eyebrow>EINBLICK INS HANDWERK</Eyebrow>
+              <h2 data-split>
+                <SplitLines>Das Dach im Fokus.</SplitLines>
+              </h2>
             </div>
-          </Reveal>
-          <div className="portfolio-grid">
+            <Link href="/referenzen" className="text-link">
+              Zum Portfolio <ArrowUpRight size={17} />
+            </Link>
+          </div>
+          <div className="portfolio-grid" data-reveal-group>
             {previewCards.map((card, i) => (
-              <Reveal key={card.key} delay={i * 60}>
-                <article className="project-card">
+              <article key={card.key} className="project-card" data-reveal-item>
+                <div data-parallax="0.1" className="parallax-frame">
                   <ImagePlaceholder
                     src={card.src}
                     alt={card.alt}
@@ -329,14 +383,14 @@ export default function HomePage() {
                     sizes="(max-width: 760px) 100vw, 33vw"
                     objectPosition={card.objectPosition}
                   />
-                  <span>{card.meta}</span>
-                  <h3>{card.title}</h3>
-                  {card.description ? <p>{card.description}</p> : null}
-                  <Link href={card.href} className="text-link">
-                    Mehr im Portfolio <ArrowUpRight size={16} />
-                  </Link>
-                </article>
-              </Reveal>
+                </div>
+                <span>{card.meta}</span>
+                <h3>{card.title}</h3>
+                {card.description ? <p>{card.description}</p> : null}
+                <Link href={card.href} className="text-link">
+                  Mehr im Portfolio <ArrowUpRight size={16} />
+                </Link>
+              </article>
             ))}
           </div>
         </div>
@@ -382,6 +436,6 @@ export default function HomePage() {
         ]}
       />
       <CTABand />
-    </>
+    </HomeMotion>
   );
 }

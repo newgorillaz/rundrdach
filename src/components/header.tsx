@@ -27,7 +27,8 @@ export function Header() {
     <>
       <div className="topbar">
         <div className="container">
-          <span>DACHARBEITEN. KLAR GEPLANT.</span>
+          {/* Company legal name stays visible site-wide for trust and imprint clarity. */}
+          <span>R&amp;R DACH PROFI GMBH · DACHARBEITEN. KLAR GEPLANT.</span>
           <span className="topbar-meta">
             <i className="status-dot" /> WIEN, ÖSTERREICH
             {/* Phone sits in the top bar so the number is visible on every page. */}
