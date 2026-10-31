@@ -117,6 +117,17 @@ p { line-height: 1.75; color: var(--ink-soft); }
 .value-strip .container > div { min-height: 87px; display: flex; align-items: center; gap: 16px; font-size: 11px; font-weight: 500; }
 .value-strip .container > div + div { padding-left: 38px; border-left: 1px solid var(--line); }
 .value-strip svg { color: var(--gold-dark); flex-shrink: 0; }
+/* Homepage trust section — Firmenbuch / GISA proof below the hero. */
+.trust-section { border-bottom: 1px solid var(--line); background: var(--white); }
+.trust-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 60px; align-items: start; }
+.trust-copy h2 { margin-bottom: 22px; }
+.trust-copy > p { font-size: 15px; line-height: 1.8; max-width: 480px; color: var(--ink-soft); }
+.trust-links { display: flex; flex-wrap: wrap; gap: 22px 34px; margin-top: 28px; }
+.trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.trust-card { min-width: 0; padding: 22px 20px; border: 1px solid var(--line); background: #f7f6f1; display: flex; flex-direction: column; gap: 10px; }
+.trust-card svg { color: var(--gold-dark); }
+.trust-card > span { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink-soft); }
+.trust-card strong { font-family: var(--font-serif); font-size: 15px; font-weight: 600; letter-spacing: -.02em; line-height: 1.45; overflow-wrap: anywhere; }
 .section-header { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 42px; }
 .section-header p { max-width: 350px; font-size: 13px; padding-bottom: 4px; }
 .section-header .eyebrow { margin-bottom: 19px; }
@@ -225,6 +236,7 @@ p { line-height: 1.75; color: var(--ink-soft); }
 .footer-top { display: grid; grid-template-columns: 1.2fr .85fr .8fr 1fr; gap: 40px; padding-bottom: 55px; }
 .footer-top > div:first-child > p { font-size: 11px; color: #bbc6cb; margin-top: 23px; line-height: 1.8; }
 .footer-legal-name { font-size: 13px !important; font-weight: 600; color: var(--white) !important; margin-top: 18px !important; margin-bottom: 0 !important; letter-spacing: -.01em; }
+.footer-register { font-size: 10px !important; color: #9aabaf !important; margin-top: 8px !important; margin-bottom: 0 !important; letter-spacing: .02em; overflow-wrap: anywhere; }
 .footer-location { display: inline-flex; align-items: center; gap: 8px; font-size: 10px; color: #bbc6cb; margin-top: 18px; }
 .footer-phone, .footer-email { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gold); margin-top: 14px; font-weight: 600; }
 .footer-phone:hover, .footer-email:hover { color: #f0c4a8; }
@@ -438,7 +450,8 @@ th { background: #eeeee7; font-weight: 600; }
   .header-action { margin-left: auto; }
   .header-phone { display: none; }
   .hero-visual, .hero-placeholder, .hero-parallax-frame { min-height: 460px; }
-  .vienna-grid, .area-grid { grid-template-columns: 1fr; }
+  .vienna-grid, .area-grid, .trust-layout { grid-template-columns: 1fr; }
+  .trust-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .hero-copy h1 { font-size: 62px; }
   .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .service-card { min-height: 250px; padding: 28px; }
@@ -489,6 +502,8 @@ th { background: #eeeee7; font-weight: 600; }
   .value-strip .container { grid-template-columns: 1fr; }
   .value-strip .container > div { min-height: 58px; font-size: 11px; gap: 18px; }
   .value-strip .container > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
+  .trust-grid { grid-template-columns: 1fr; }
+  .trust-copy > p { font-size: 14px; }
   .section-header { align-items: flex-start; flex-direction: column; gap: 23px; margin-bottom: 30px; }
   .section-header p br { display: none; }
   .service-grid { gap: 13px; }

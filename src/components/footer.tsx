@@ -14,6 +14,12 @@ export function Footer() {
             <Brand light />
             {/* Legal company name — important for a registered, tax-paying business. */}
             {site.legalName && <p className="footer-legal-name">{site.legalName}</p>}
+            {/* Firmenbuch and GISA numbers — verifiable Austrian trade identity. */}
+            {site.companyNumber && site.trade.gisaNumber && (
+              <p className="footer-register">
+                {site.companyNumber} · GISA-Zahl {site.trade.gisaNumber} · Spengler
+              </p>
+            )}
             <p>
               Dacharbeiten in Wien.
               <br />

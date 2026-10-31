@@ -1,4 +1,4 @@
-import { MapPin, Mail, Clock3, ArrowUpRight, Phone } from "lucide-react";
+import { MapPin, Mail, Clock3, ArrowUpRight, Phone, Building2 } from "lucide-react";
 import Link from "next/link";
 import { pageMetadata } from "@/lib/seo";
 import { Breadcrumb, Eyebrow } from "@/components/sections";
@@ -40,6 +40,23 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
               braucht. Wir klären den nächsten Schritt.
             </p>
             <div className="contact-details">
+              {/* Registered company identity — FN and GISA for trust on the contact page. */}
+              {site.legalName && (
+                <div>
+                  <Building2 size={21} />
+                  <span>
+                    <strong>Unternehmen</strong>
+                    {site.legalName}
+                    {(site.companyNumber || site.trade.gisaNumber) && (
+                      <small>
+                        {[site.companyNumber, site.trade.gisaNumber ? "GISA-Zahl " + site.trade.gisaNumber : ""]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </small>
+                    )}
+                  </span>
+                </div>
+              )}
               <div>
                 <MapPin size={21} />
                 <span>

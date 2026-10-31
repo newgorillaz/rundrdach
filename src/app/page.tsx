@@ -1,5 +1,19 @@
 import Link from "next/link";
-import { ArrowDown, ArrowUpRight, MapPin, ShieldCheck, ScanLine, Layers3, Mail, Phone } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  MapPin,
+  ShieldCheck,
+  ScanLine,
+  Layers3,
+  Mail,
+  Phone,
+  BadgeCheck,
+  Landmark,
+  FileText,
+  CalendarCheck,
+  Hammer,
+} from "lucide-react";
 import { pageMetadata } from "@/lib/seo";
 import { Eyebrow, ServiceCards, Process, FAQ, CTABand } from "@/components/sections";
 import { ImagePlaceholder } from "@/components/image-placeholder";
@@ -142,6 +156,80 @@ export default function HomePage() {
           </div>
         </div>
       </div>
+
+      {/* Austrian trust block — Firmenbuch and GISA make the business verifiable. */}
+      <section className="section trust-section">
+        <div className="container trust-layout">
+          <div className="trust-copy" data-reveal>
+            <Eyebrow>GEPRÜFT &amp; EINGETRAGEN</Eyebrow>
+            <h2 data-split>
+              <SplitLines>
+                Eingetragener Fachbetrieb.
+                <br />
+                In Wien zu Hause.
+              </SplitLines>
+            </h2>
+            <p>
+              Die {site.legalName} ist ein im Firmenbuch eingetragenes Wiener Unternehmen mit aufrechter
+              Gewerbeberechtigung für das reglementierte Spenglerhandwerk. Alle Angaben können Sie jederzeit selbst im
+              öffentlichen Gewerbeinformationssystem (GISA) überprüfen.
+            </p>
+            <div className="trust-links">
+              <a
+                href={site.trade.verifyUrl}
+                className="text-link"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Im GISA-Register überprüfen <ArrowUpRight size={17} />
+              </a>
+              <Link href="/impressum" className="text-link">
+                Zum Impressum <ArrowUpRight size={17} />
+              </Link>
+            </div>
+          </div>
+          <div className="trust-grid" data-reveal-group>
+            <article className="trust-card" data-reveal-item>
+              <Hammer size={22} strokeWidth={1.4} aria-hidden="true" />
+              <span>Gewerbe</span>
+              <strong>{site.trade.wording}</strong>
+            </article>
+            <article className="trust-card" data-reveal-item>
+              <BadgeCheck size={22} strokeWidth={1.4} aria-hidden="true" />
+              <span>GISA-Zahl</span>
+              <strong>{site.trade.gisaNumber}</strong>
+            </article>
+            <article className="trust-card" data-reveal-item>
+              <FileText size={22} strokeWidth={1.4} aria-hidden="true" />
+              <span>Firmenbuch</span>
+              <strong>
+                {site.companyNumber}
+                <br />
+                {site.companyCourt}
+              </strong>
+            </article>
+            <article className="trust-card" data-reveal-item>
+              <Landmark size={22} strokeWidth={1.4} aria-hidden="true" />
+              <span>Gewerbebehörde</span>
+              <strong>{site.tradeAuthority}</strong>
+            </article>
+            <article className="trust-card" data-reveal-item>
+              <CalendarCheck size={22} strokeWidth={1.4} aria-hidden="true" />
+              <span>Gewerbe seit</span>
+              <strong>{site.trade.since}</strong>
+            </article>
+            <article className="trust-card" data-reveal-item>
+              <MapPin size={22} strokeWidth={1.4} aria-hidden="true" />
+              <span>Standort</span>
+              <strong>
+                {site.street}
+                <br />
+                {site.postalCode} Wien
+              </strong>
+            </article>
+          </div>
+        </div>
+      </section>
 
       {/* Scroll-driven company marquee — reinforces legal identity with motion. */}
       <div className="identity-marquee" aria-hidden="true">

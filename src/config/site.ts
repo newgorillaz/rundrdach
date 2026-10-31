@@ -9,17 +9,34 @@ export const site = {
   whatsapp: "+4368120735980",
   // Business contact — used in footer, Kontakt, Impressum and schema.
   email: "Dach2021gmbh@gmail.com",
-  street: "Braunhirschengasse 31/1a",
+  // Street address matches the GISA trade-licence location exactly.
+  street: "Braunhirschengasse 31/1A",
   postalCode: "1150",
   legalName: "R&R Dach Profi GmbH",
-  companyNumber: "",
+  // Austrian Firmenbuch number — standard display form "FN … i".
+  companyNumber: "FN 651531 i",
+  // Register court for every Vienna company number.
+  companyCourt: "Handelsgericht Wien",
+  // UID and managing director remain empty until confirmed by the business.
   vatId: "",
-  tradeAuthority: "",
-  chamber: "",
-  professionalRules: "",
+  tradeAuthority: "Magistrat der Stadt Wien",
+  chamber: "Wirtschaftskammer Wien, Landesinnung der Dachdecker, Glaser und Spengler",
+  professionalRules: "Gewerbeordnung 1994 (GewO), abrufbar unter www.ris.bka.gv.at",
   managingDirector: "",
   openingHours: "",
   socialLinks: [] as string[],
+  // Official GISA trade licence data, shown in the Impressum and the homepage trust section.
+  trade: {
+    gisaNumber: "38530739",
+    legalForm: "Gesellschaft mit beschränkter Haftung",
+    gln: "9110037564862",
+    type: "reglementiertes Gewerbe",
+    wording: "Spengler verbunden mit Kupferschmiede (verbundenes Handwerk)",
+    since: "26.06.2025",
+    locationSince: "26.06.2025",
+    municipality: "Wien",
+    verifyUrl: "https://www.gisa.gv.at/abfrage",
+  },
   // Set true after checking the offered materials and services with the business.
   contentApproved: false,
 };

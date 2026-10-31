@@ -28,7 +28,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
   // Schema waits for full legal address; phone alone is not enough for RoofingContractor.
   const businessReady = siteUrl && site.street && site.postalCode && site.phone && site.legalName;
   return (
-    <html lang="de-AT">
+    <html lang="de-AT" data-scroll-behavior="smooth">
       <body>
         <a className="skip-link" href="#main">
           Zum Inhalt springen
@@ -49,6 +49,18 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
               url: siteUrl,
               telephone: site.phone,
               ...(site.email ? { email: site.email } : {}),
+              // GLN is the official Austrian location number from the GISA entry.
+              ...(site.trade.gln ? { globalLocationNumber: site.trade.gln } : {}),
+              // Firmenbuch number as a structured identifier for search engines.
+              ...(site.companyNumber
+                ? {
+                    identifier: {
+                      "@type": "PropertyValue",
+                      name: "Firmenbuchnummer",
+                      value: site.companyNumber,
+                    },
+                  }
+                : {}),
               address: {
                 "@type": "PostalAddress",
                 streetAddress: site.street,
