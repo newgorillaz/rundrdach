@@ -364,7 +364,19 @@ th { background: #eeeee7; font-weight: 600; }
 .not-found h1 { font-size: clamp(38px, 5vw, 62px); margin-bottom: 25px; }
 .not-found p { margin-bottom: 28px; }
 /* Fixed WhatsApp CTA — below consent (z-index 1000), above content. */
-.whatsapp {
+/* Shared fixed stack for floating contact CTAs (E-Mail above WhatsApp). */
+.floating-actions {
+  position: fixed;
+  z-index: 50;
+  bottom: max(24px, env(safe-area-inset-bottom, 0px));
+  right: max(24px, env(safe-area-inset-right, 0px));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+.whatsapp,
+.floating-email {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -372,28 +384,38 @@ th { background: #eeeee7; font-weight: 600; }
   width: 56px;
   height: 56px;
   padding: 0;
-  background: var(--whatsapp);
   color: white;
   border-radius: 50%;
-  position: fixed;
-  z-index: 50;
-  bottom: max(24px, env(safe-area-inset-bottom, 0px));
-  right: max(24px, env(safe-area-inset-right, 0px));
-  box-shadow: 0 4px 22px #128c3740;
   overflow: hidden;
   transition: width .25s ease, border-radius .25s ease, background .2s, box-shadow .2s;
-  animation: whatsappIn .5s ease .4s both;
+  animation: floatingIn .5s ease .4s both;
 }
-.whatsapp:hover, .whatsapp:focus-visible {
+.whatsapp {
+  background: var(--whatsapp);
+  box-shadow: 0 4px 22px #128c3740;
+}
+.floating-email {
+  background: var(--ink);
+  box-shadow: 0 4px 22px #17263040;
+}
+.whatsapp:hover, .whatsapp:focus-visible,
+.floating-email:hover, .floating-email:focus-visible {
   width: auto;
   min-width: 56px;
   padding: 0 18px 0 14px;
   border-radius: 28px;
   gap: 10px;
+}
+.whatsapp:hover, .whatsapp:focus-visible {
   background: var(--whatsapp-dark);
   box-shadow: 0 6px 28px #128c3750;
 }
-.whatsapp-label {
+.floating-email:hover, .floating-email:focus-visible {
+  background: var(--gold-dark);
+  box-shadow: 0 6px 28px #17263050;
+}
+.whatsapp-label,
+.floating-email-label {
   font-size: 13px;
   font-weight: 600;
   letter-spacing: .02em;
@@ -403,11 +425,12 @@ th { background: #eeeee7; font-weight: 600; }
   white-space: nowrap;
   transition: max-width .25s ease, opacity .2s ease;
 }
-.whatsapp:hover .whatsapp-label, .whatsapp:focus-visible .whatsapp-label {
+.whatsapp:hover .whatsapp-label, .whatsapp:focus-visible .whatsapp-label,
+.floating-email:hover .floating-email-label, .floating-email:focus-visible .floating-email-label {
   max-width: 100px;
   opacity: 1;
 }
-@keyframes whatsappIn {
+@keyframes floatingIn {
   from { opacity: 0; transform: translateY(12px) scale(.92); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
@@ -498,7 +521,7 @@ th { background: #eeeee7; font-weight: 600; }
   .craft-band-image { aspect-ratio: 1; }
   .vienna-copy p, .area-copy p { font-size: 15px; }
   .topbar-phone { display: none; }
-  .whatsapp { bottom: max(18px, env(safe-area-inset-bottom, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
+  .floating-actions { bottom: max(18px, env(safe-area-inset-bottom, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); }
   .value-strip .container { grid-template-columns: 1fr; }
   .value-strip .container > div { min-height: 58px; font-size: 11px; gap: 18px; }
   .value-strip .container > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }

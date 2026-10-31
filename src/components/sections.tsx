@@ -15,7 +15,7 @@ import {
   AppWindow,
 } from "lucide-react";
 import { mainServices, relatedServices, type Service, type ServiceIcon } from "@/data/services";
-import { QuoteButton, PhoneButton } from "@/components/actions";
+import { QuoteButton, PhoneButton, EmailButton } from "@/components/actions";
 import { JsonLd } from "@/lib/seo";
 import { siteUrl } from "@/config/site";
 
@@ -239,6 +239,7 @@ export function CTABand({ service = "general" }: { service?: string }) {
         <div className="cta-actions">
           <QuoteButton location="cta-band" service={service} label="Angebot anfragen" />
           <PhoneButton location="cta-band" />
+          <EmailButton location="cta-band" />
           <span>Neueindeckung · Reparatur · Abdichtung · Zubehör</span>
         </div>
       </div>

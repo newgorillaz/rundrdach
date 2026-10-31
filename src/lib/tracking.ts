@@ -74,7 +74,7 @@ export function applyConsent(consent: Consent) {
   // Drop the already-loaded container on a complete withdrawal.
   if (reloadOnWithdrawal) window.setTimeout(() => window.location.reload(), 0);
 }
-type EventName = "phone_click" | "whatsapp_click" | "quote_request_click" | "generate_lead";
+type EventName = "phone_click" | "whatsapp_click" | "email_click" | "quote_request_click" | "generate_lead";
 export function trackEvent(event: EventName, context: { service_type?: string; cta_location: string }) {
   const consent = readConsent();
   if (!gtmId || !consent || (!consent.analytics && !consent.marketing)) return;

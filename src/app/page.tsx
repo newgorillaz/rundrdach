@@ -17,7 +17,7 @@ import {
 import { pageMetadata } from "@/lib/seo";
 import { Eyebrow, ServiceCards, Process, FAQ, CTABand } from "@/components/sections";
 import { ImagePlaceholder } from "@/components/image-placeholder";
-import { QuoteButton, PhoneButton } from "@/components/actions";
+import { QuoteButton, PhoneButton, EmailButton } from "@/components/actions";
 import { HomeMotion } from "@/components/home-motion";
 import { SplitLines } from "@/components/split-lines";
 import { homeImages } from "@/data/gallery";
@@ -92,6 +92,7 @@ export default function HomePage() {
             <div className="hero-buttons" data-hero="buttons">
               <QuoteButton location="home-hero" label="Projekt anfragen" />
               <PhoneButton location="home-hero" />
+              <EmailButton location="home-hero" />
             </div>
             <Link href="#leistungen" className="hero-scroll" data-hero="scroll">
               <span>

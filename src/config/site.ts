@@ -17,12 +17,13 @@ export const site = {
   companyNumber: "FN 651531 i",
   // Register court for every Vienna company number.
   companyCourt: "Handelsgericht Wien",
-  // UID and managing director remain empty until confirmed by the business.
-  vatId: "",
+  // Austrian VAT ID — standard form ATU + digits, no spaces.
+  vatId: "ATU82318047",
   tradeAuthority: "Magistrat der Stadt Wien",
   chamber: "Wirtschaftskammer Wien, Landesinnung der Dachdecker, Glaser und Spengler",
   professionalRules: "Gewerbeordnung 1994 (GewO), abrufbar unter www.ris.bka.gv.at",
-  managingDirector: "",
+  // Managing director shown in the Impressum as the vertretungsberechtigte Person.
+  managingDirector: "Samu Rupi",
   openingHours: "",
   socialLinks: [] as string[],
   // Official GISA trade licence data, shown in the Impressum and the homepage trust section.
@@ -54,6 +55,10 @@ export const indexingEnabled = Boolean(siteUrl && process.env.NEXT_PUBLIC_INDEXI
 export const gtmId = /^GTM-[A-Z0-9]+$/.test(process.env.NEXT_PUBLIC_GTM_ID ?? "") ? process.env.NEXT_PUBLIC_GTM_ID! : "";
 export const contactReady = Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_FROM_EMAIL && process.env.CONTACT_TO_EMAIL);
 export const phoneHref = /^\+?[0-9 ()/-]{7,}$/.test(site.phone) ? "tel:" + site.phone.replace(/[^+\d]/g, "") : null;
+// Opens the visitor's mail client with the business address and a concrete subject.
+export const mailtoHref = site.email
+  ? "mailto:" + site.email + "?subject=" + encodeURIComponent("Anfrage Dacharbeiten Wien")
+  : null;
 // Pre-filled German greeting keeps the first WhatsApp message concrete for Vienna roofing enquiries.
 const whatsappDigits = site.whatsapp.replace(/\D/g, "");
 export const whatsappHref = /^\+?\d{8,15}$/.test(site.whatsapp)

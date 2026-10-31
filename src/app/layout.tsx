@@ -10,7 +10,7 @@ import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ConsentManager } from "@/components/consent-manager";
-import { WhatsAppButton } from "@/components/actions";
+import { FloatingEmailButton, WhatsAppButton } from "@/components/actions";
 import { JsonLd } from "@/lib/seo";
 import { indexingEnabled, site, siteUrl } from "@/config/site";
 
@@ -36,7 +36,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <Header />
         <main id="main">{children}</main>
         <Footer />
-        <WhatsAppButton />
+        {/* Floating contact stack — E-Mail above WhatsApp, fixed bottom-right. */}
+        <div className="floating-actions">
+          <FloatingEmailButton />
+          <WhatsAppButton />
+        </div>
         <ConsentManager />
         {businessReady && (
           <JsonLd

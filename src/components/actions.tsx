@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
-import { ArrowUpRight, Phone } from "lucide-react";
-import { phoneHref, site, whatsappHref } from "@/config/site";
+import { ArrowUpRight, Mail, Phone } from "lucide-react";
+import { mailtoHref, phoneHref, site, whatsappHref } from "@/config/site";
 import { trackEvent } from "@/lib/tracking";
 
 export function QuoteButton({
@@ -38,6 +38,20 @@ export function PhoneButton({ location = "content", className = "" }: { location
       <Phone size={16} /> {site.phone}
     </a>
   ) : null;
+}
+
+/** Outline mailto CTA — opens the visitor's mail client with a pre-filled subject. */
+export function EmailButton({ location = "content", className = "" }: { location?: string; className?: string }) {
+  if (!mailtoHref) return null;
+  return (
+    <a
+      className={"button button-outline " + className}
+      href={mailtoHref}
+      onClick={() => trackEvent("email_click", { cta_location: location })}
+    >
+      <Mail size={16} /> E-Mail schreiben
+    </a>
+  );
 }
 
 /** Compact tel link for top bar, header, and footer — same number as PhoneButton. */
@@ -91,6 +105,23 @@ export function WhatsAppButton() {
     >
       <WhatsAppIcon />
       <span className="whatsapp-label">WhatsApp</span>
+    </a>
+  );
+}
+
+/** Fixed floating mailto CTA — stacked above WhatsApp in the shared actions column. */
+export function FloatingEmailButton() {
+  if (!mailtoHref) return null;
+  return (
+    <a
+      className="floating-email"
+      href={mailtoHref}
+      aria-label="E-Mail: Rundrdach kontaktieren"
+      title="E-Mail"
+      onClick={() => trackEvent("email_click", { cta_location: "floating" })}
+    >
+      <Mail size={22} strokeWidth={1.8} aria-hidden="true" />
+      <span className="floating-email-label">E-Mail</span>
     </a>
   );
 }
