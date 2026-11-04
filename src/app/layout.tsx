@@ -12,7 +12,7 @@ import { Footer } from "@/components/footer";
 import { ConsentManager } from "@/components/consent-manager";
 import { FloatingEmailButton, WhatsAppButton } from "@/components/actions";
 import { JsonLd } from "@/lib/seo";
-import { indexingEnabled, site, siteUrl } from "@/config/site";
+import { googleSiteVerification, indexingEnabled, site, siteUrl } from "@/config/site";
 
 export const metadata: Metadata = {
   ...(siteUrl ? { metadataBase: new URL(siteUrl) } : {}),
@@ -21,7 +21,8 @@ export const metadata: Metadata = {
     "Rundrdach in Wien: Dacheindeckung, Dachreparatur, Dachabdichtung, Dachsanierung und weitere Dachleistungen. Ihr Dachprojekt verständlich planen und ein Angebot anfragen.",
   applicationName: site.name,
   robots: { index: indexingEnabled, follow: indexingEnabled },
-  verification: { google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined },
+  // HTML ownership tag for Google Search Console on www.r-und-r-dach.at.
+  verification: { google: googleSiteVerification },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

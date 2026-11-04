@@ -17,7 +17,7 @@ import {
 import { pageMetadata } from "@/lib/seo";
 import { Eyebrow, ServiceCards, Process, FAQ, CTABand } from "@/components/sections";
 import { ImagePlaceholder } from "@/components/image-placeholder";
-import { QuoteButton, PhoneButton, EmailButton } from "@/components/actions";
+import { QuoteButton, PhoneButton, EmailButton, EmailLink, PhoneLink } from "@/components/actions";
 import { HomeMotion } from "@/components/home-motion";
 import { SplitLines } from "@/components/split-lines";
 import { homeImages } from "@/data/gallery";
@@ -418,13 +418,15 @@ export default function HomePage() {
                 {site.email && (
                   <li>
                     <Mail size={16} aria-hidden="true" />
-                    <a href={"mailto:" + site.email}>{site.email}</a>
+                    <EmailLink location="home-standort" href={"mailto:" + site.email}>
+                      {site.email}
+                    </EmailLink>
                   </li>
                 )}
                 {phoneHref && (
                   <li>
                     <Phone size={16} aria-hidden="true" />
-                    <a href={phoneHref}>{site.phone}</a>
+                    <PhoneLink location="home-standort">{site.phone}</PhoneLink>
                   </li>
                 )}
               </ul>

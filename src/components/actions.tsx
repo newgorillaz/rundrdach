@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { ArrowUpRight, Mail, Phone } from "lucide-react";
 import { mailtoHref, phoneHref, site, whatsappHref } from "@/config/site";
-import { trackEvent } from "@/lib/tracking";
+import { reportAdsConversion, trackEvent } from "@/lib/tracking";
 
 export function QuoteButton({
   location = "content",
@@ -33,7 +33,10 @@ export function PhoneButton({ location = "content", className = "" }: { location
     <a
       className={"button button-outline " + className}
       href={phoneHref}
-      onClick={() => trackEvent("phone_click", { cta_location: location })}
+      onClick={(event) => {
+        trackEvent("phone_click", { cta_location: location });
+        reportAdsConversion("phone", phoneHref, event);
+      }}
     >
       <Phone size={16} /> {site.phone}
     </a>
@@ -47,7 +50,10 @@ export function EmailButton({ location = "content", className = "" }: { location
     <a
       className={"button button-outline " + className}
       href={mailtoHref}
-      onClick={() => trackEvent("email_click", { cta_location: location })}
+      onClick={(event) => {
+        trackEvent("email_click", { cta_location: location });
+        reportAdsConversion("email", mailtoHref, event);
+      }}
     >
       <Mail size={16} /> E-Mail schreiben
     </a>
@@ -71,12 +77,42 @@ export function PhoneLink({
     <a
       className={className}
       href={phoneHref}
-      onClick={() => {
+      onClick={(event) => {
         trackEvent("phone_click", { cta_location: location });
         onClick?.();
+        reportAdsConversion("phone", phoneHref, event);
       }}
     >
       {children ?? site.phone}
+    </a>
+  );
+}
+
+/** Compact mailto link for footer, contact cards, and trust sections. */
+export function EmailLink({
+  location = "content",
+  className = "",
+  href,
+  children,
+}: {
+  location?: string;
+  className?: string;
+  /** Defaults to the pre-filled subject mailto; pass a plain address mailto when needed. */
+  href?: string;
+  children?: React.ReactNode;
+}) {
+  const target = href || mailtoHref;
+  if (!target) return null;
+  return (
+    <a
+      className={className}
+      href={target}
+      onClick={(event) => {
+        trackEvent("email_click", { cta_location: location });
+        reportAdsConversion("email", target, event);
+      }}
+    >
+      {children ?? site.email}
     </a>
   );
 }
@@ -101,7 +137,11 @@ export function WhatsAppButton() {
       rel="noopener noreferrer"
       aria-label="WhatsApp: Rundrdach kontaktieren"
       title="WhatsApp"
-      onClick={() => trackEvent("whatsapp_click", { cta_location: "floating" })}
+      onClick={() => {
+        trackEvent("whatsapp_click", { cta_location: "floating" });
+        // New-tab link — fire the Ads conversion without delaying navigation.
+        reportAdsConversion("whatsapp");
+      }}
     >
       <WhatsAppIcon />
       <span className="whatsapp-label">WhatsApp</span>
@@ -118,7 +158,10 @@ export function FloatingEmailButton() {
       href={mailtoHref}
       aria-label="E-Mail: Rundrdach kontaktieren"
       title="E-Mail"
-      onClick={() => trackEvent("email_click", { cta_location: "floating" })}
+      onClick={(event) => {
+        trackEvent("email_click", { cta_location: "floating" });
+        reportAdsConversion("email", mailtoHref, event);
+      }}
     >
       <Mail size={22} strokeWidth={1.8} aria-hidden="true" />
       <span className="floating-email-label">E-Mail</span>

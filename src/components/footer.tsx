@@ -4,6 +4,7 @@ import { Brand } from "@/components/brand";
 import { mainServices, specialistServices } from "@/data/services";
 import { phoneHref, site } from "@/config/site";
 import { CookieSettingsButton } from "@/components/consent-manager";
+import { EmailLink, PhoneLink } from "@/components/actions";
 
 export function Footer() {
   return (
@@ -33,16 +34,16 @@ export function Footer() {
             </span>
             {/* Phone number is listed in the footer on every page. */}
             {phoneHref && (
-              <a className="footer-phone" href={phoneHref}>
+              <PhoneLink location="footer" className="footer-phone">
                 <Phone size={15} aria-hidden="true" />
                 {site.phone}
-              </a>
+              </PhoneLink>
             )}
             {site.email && (
-              <a className="footer-email" href={"mailto:" + site.email}>
+              <EmailLink location="footer" className="footer-email" href={"mailto:" + site.email}>
                 <Mail size={15} aria-hidden="true" />
                 {site.email}
-              </a>
+              </EmailLink>
             )}
           </div>
           {/* Main services stay primary; hub + specialists keep crawl depth without overcrowding. */}
@@ -72,8 +73,12 @@ export function Footer() {
             <h2>Rundrdach</h2>
             <Link href="/referenzen">Referenzen</Link>
             <Link href="/kontakt">Kontakt</Link>
-            {phoneHref && <a href={phoneHref}>{site.phone}</a>}
-            {site.email && <a href={"mailto:" + site.email}>{site.email}</a>}
+            {phoneHref && <PhoneLink location="footer-nav">{site.phone}</PhoneLink>}
+            {site.email && (
+              <EmailLink location="footer-nav" href={"mailto:" + site.email}>
+                {site.email}
+              </EmailLink>
+            )}
             {site.openingHours && <p>{site.openingHours}</p>}
           </div>
         </div>

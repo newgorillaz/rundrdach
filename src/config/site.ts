@@ -50,9 +50,34 @@ function validSiteUrl(value: string | undefined): string | null {
     return url.origin;
   } catch { return null; }
 }
-export const siteUrl = validSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
-export const indexingEnabled = Boolean(siteUrl && process.env.NEXT_PUBLIC_INDEXING_ENABLED === "true" && (process.env.VERCEL_ENV === undefined || process.env.VERCEL_ENV === "production"));
+
+/** Production domain for canonicals, sitemap, Open Graph and JSON-LD. */
+const PRODUCTION_SITE_URL = "https://www.r-und-r-dach.at";
+/** Google Ads conversion ID — used for the base tag and send_to labels. */
+const DEFAULT_GOOGLE_ADS_ID = "AW-18521702973";
+/** Search Console HTML verification token for the production domain. */
+const DEFAULT_GOOGLE_SITE_VERIFICATION = "YdFJNuk6dv7W_EJRskOmtMxzbdkI0N1M7doDMV6OBw4";
+
+export const siteUrl = validSiteUrl(process.env.NEXT_PUBLIC_SITE_URL) ?? PRODUCTION_SITE_URL;
+// Indexing stays on for production unless explicitly disabled; Vercel previews remain noindex.
+export const indexingEnabled = Boolean(
+  siteUrl &&
+    process.env.NEXT_PUBLIC_INDEXING_ENABLED !== "false" &&
+    (process.env.VERCEL_ENV === undefined || process.env.VERCEL_ENV === "production"),
+);
 export const gtmId = /^GTM-[A-Z0-9]+$/.test(process.env.NEXT_PUBLIC_GTM_ID ?? "") ? process.env.NEXT_PUBLIC_GTM_ID! : "";
+// Google Ads ID from env when valid; otherwise the production account ID.
+export const googleAdsId = /^AW-\d+$/.test(process.env.NEXT_PUBLIC_GOOGLE_ADS_ID ?? "")
+  ? process.env.NEXT_PUBLIC_GOOGLE_ADS_ID!
+  : DEFAULT_GOOGLE_ADS_ID;
+// Phone / WhatsApp / email click conversion labels from the Google Ads account.
+export const adsConversions = {
+  phone: `${DEFAULT_GOOGLE_ADS_ID}/As6YCJ_l760dEL2E6_9E`,
+  whatsapp: `${DEFAULT_GOOGLE_ADS_ID}/uDMaCKLl760dEL2E6_9E`,
+  email: `${DEFAULT_GOOGLE_ADS_ID}/IieACLDI57EdEL2E6_9E`,
+} as const;
+export const googleSiteVerification =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || DEFAULT_GOOGLE_SITE_VERIFICATION;
 export const contactReady = Boolean(process.env.RESEND_API_KEY && process.env.CONTACT_FROM_EMAIL && process.env.CONTACT_TO_EMAIL);
 export const phoneHref = /^\+?[0-9 ()/-]{7,}$/.test(site.phone) ? "tel:" + site.phone.replace(/[^+\d]/g, "") : null;
 // Opens the visitor's mail client with the business address and a concrete subject.

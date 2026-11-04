@@ -95,54 +95,62 @@ The shared store records a hash of the source IP with a one-hour expiry; the loc
 Each page has original German copy, one H1, unique title and description, relevant internal links and visible breadcrumbs. Services target Wien. The site uses `de-AT` and `de_AT`.
 
 ```env
-NEXT_PUBLIC_SITE_URL=https://YOUR-REAL-DOMAIN.at
+NEXT_PUBLIC_SITE_URL=https://www.r-und-r-dach.at
 NEXT_PUBLIC_INDEXING_ENABLED=true
-NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=
+NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=YdFJNuk6dv7W_EJRskOmtMxzbdkI0N1M7doDMV6OBw4
 ```
 
-No domain is fabricated. Without a valid HTTPS domain, canonical URLs and absolute JSON-LD links are omitted. Indexing is disabled until explicitly enabled. Vercel previews remain noindex even when the production flag is true. The sitemap is empty while indexing is disabled.
+The production domain defaults to `https://www.r-und-r-dach.at` when `NEXT_PUBLIC_SITE_URL` is empty. Indexing is enabled for that production site unless `NEXT_PUBLIC_INDEXING_ENABLED=false`. Vercel previews remain noindex. The sitemap is empty while indexing is disabled.
 
-Enable indexing only after the business details, offered services, domain and legal pages are complete. The production flag must be set before the production build; changing it requires a rebuild. robots.txt does not by itself remove a page already indexed; the noindex metadata is also provided.
-
-Service and BreadcrumbList JSON-LD are emitted when the real domain is configured. RoofingContractor is emitted only when actual business name, street, postal code and phone are present. No invented ratings or address appear in structured data. Structured data does not guarantee rich results.
+Service and BreadcrumbList JSON-LD are emitted when the domain is configured. RoofingContractor is emitted only when actual business name, street, postal code and phone are present. No invented ratings or address appear in structured data. Structured data does not guarantee rich results.
 
 Search Console:
-1. Verify your domain with DNS, or set the HTML verification variable.
-2. Rebuild after adding the verification variable.
+1. The HTML verification meta tag is emitted from `googleSiteVerification` (code default or env override).
+2. Rebuild after changing the verification variable.
 3. Submit the production /sitemap.xml.
-4. Inspect the actual production pages.
+4. Inspect the actual production pages on https://www.r-und-r-dach.at/.
 
-## Google Tag Manager, GA4 and Google Ads
+## Google Ads, consent and optional GTM
 
-Only one GTM container is supported:
+Google Ads is installed directly in the app (not only via GTM):
+
+```env
+NEXT_PUBLIC_GOOGLE_ADS_ID=AW-18521702973
+```
+
+The ID defaults in code when the env variable is unset. The base tag loads only after Marketing consent. Click conversions:
+
+| Action | Conversion send_to |
+| --- | --- |
+| Phone link click | `AW-18521702973/As6YCJ_l760dEL2E6_9E` |
+| WhatsApp button click | `AW-18521702973/uDMaCKLl760dEL2E6_9E` |
+| Email link click | `AW-18521702973/IieACLDI57EdEL2E6_9E` (value 1.0, currency RON) |
+
+Phone and email clicks wait for the Ads callback (or a short timeout) before opening `tel:` / `mailto:`. WhatsApp opens in a new tab and does not delay navigation. Without Marketing consent the links work immediately and no Ads conversion is sent.
+
+An optional GTM container remains supported:
 
 ```env
 NEXT_PUBLIC_GTM_ID=GTM-YOURREALID
 ```
 
-The example above must be replaced by your actual container ID. Keep the setting empty to leave tracking disabled.
-
-GA4 and Ads are configured in GTM, not as additional gtag.js snippets in the code. Installing GTM does not configure either product automatically.
+Keep GTM empty when you only need the direct Ads tag. If GTM is set, configure GA4 inside that container; do not double-count the same primary conversion in Ads and GA4.
 
 ### Consent setup
 
-Basic Consent Mode is the default. The GTM script is not requested before a visitor grants analytics or marketing permission. Defaults are denied, and the selected consent values are queued before GTM is loaded.
+Basic Consent Mode is the default. Neither the Google Ads `gtag.js` script nor GTM is requested before a visitor grants the matching permission. Defaults are denied, and the selected consent values are queued before tags load.
 
 Consent categories:
 - Statistics: analytics_storage.
-- Marketing: ad_storage, ad_user_data and ad_personalization.
+- Marketing: ad_storage, ad_user_data and ad_personalization (required for the Ads tag and click conversions).
 - The first-party cookie `rundrdach_consent_v1` retains the selected categories for 180 days.
 
-IMPORTANT: complete the GTM container consent configuration before activating it.
-- GA4/Google tag and GA4 event tags: require analytics_storage as an **additional** consent check, so they do not fire merely because marketing was accepted.
-- Ads conversion/remarketing tags: require the relevant advertising consent categories. Do not fire them on statistics-only permission.
+IMPORTANT when also using GTM:
+- GA4/Google tag and GA4 event tags: require analytics_storage as an **additional** consent check.
+- Extra Ads tags in GTM: require advertising consent; do not fire them on statistics-only permission.
 - Do not use All Pages or automatic history triggers to fire measurement before the required category is granted.
-- For a GTM consent template, use Google's dedicated consent APIs and confirm initialization order in Tag Assistant. Do not add a second consent banner or reset a saved choice to granted.
-- Explicitly apply consent checks to any non-Google tag.
 
-Built-in checks alone can allow some Google tags to send cookieless pings. The additional consent requirements are needed for this project's chosen basic behavior.
-
-When all optional consent is withdrawn after GTM has loaded, the page is reloaded to discard the loaded container. When one category remains permitted, its container remains; correct category checks in GTM are required. Accessible recognized tracking cookies are removed when permission is withdrawn. The site cannot delete third-party cookies or historical platform data.
+When all optional consent is withdrawn after Ads or GTM has loaded, the page is reloaded to discard the loaded scripts. Accessible recognized tracking cookies are removed when permission is withdrawn. The site cannot delete third-party cookies or historical platform data.
 
 No pre-consent action history is replayed. No bot exceptions are included.
 
@@ -150,43 +158,25 @@ No pre-consent action history is replayed. No bot exceptions are included.
 
 | Event | Trigger | Suggested purpose |
 | --- | --- | --- |
-| phone_click | Actual click on a configured telephone link | Contact intent |
-| whatsapp_click | Actual click on a configured WhatsApp link | Contact intent |
-| quote_request_click | Click on a quote CTA | Funnel step |
-| generate_lead | Provider-confirmed form acceptance | Lead conversion |
-| page_view | Initial permitted view and subsequent route change | GA4 page reporting |
+| phone_click | Actual click on a configured telephone link | Contact intent + Ads phone conversion |
+| whatsapp_click | Actual click on a configured WhatsApp link | Contact intent + Ads WhatsApp conversion |
+| email_click | Actual click on a configured email link | Contact intent + Ads email conversion |
+| quote_request_click | Click on a quote CTA | Funnel step (dataLayer / GTM) |
+| generate_lead | Provider-confirmed form acceptance | Lead conversion (dataLayer / GTM) |
+| page_view | Initial permitted view and subsequent route change | GA4 page reporting via GTM |
 
 Public parameters: service_type, cta_location and page_path. No form content, contact data or URL query strings are sent. A phone click is not a completed phone call.
 
-Choose one page-view strategy:
-1. In the GTM Google tag configuration set `send_page_view` to false.
-2. Turn off automatic page/history-change reporting in GA4 Enhanced Measurement.
-3. Fire a GA4 Event tag named `page_view` on the custom `page_view` event.
-4. Map page_path, page_location and page_title from dataLayer.
-5. Do not add a GTM History Change page-view trigger in parallel.
-
-A permitted initial page view is emitted when statistics consent becomes available. Navigation emits one view per pathname change. Privacy-sensitive query strings are excluded.
-
-For each conversion, choose either a direct Ads conversion tag or a GA4 import. Avoid counting the same lead through both as primary conversions. Use actual conversion IDs and labels in GTM.
-
-### Optional additional services
-
-Meta Pixel and Microsoft Clarity can be added later through the same GTM container with their own consent checks and an updated privacy/cookie notice. Neither is installed or loaded in this project. No extra tracking SDK exists in the source.
-
-### Manual verification after configuring your accounts
+### Manual verification
 
 Use browser network tools and Tag Assistant:
-- New visit: no GTM request before permission.
-- Reject optional: no measurement tags.
-- Statistics only: GA4 allowed; Ads blocked.
-- Marketing only: Ads allowed; GA4 blocked.
-- Accept both: one container and one page view per navigation.
-- Reopen cookie settings, change selection, withdraw all and confirm the reload.
-- Click phone/WhatsApp and submit the configured form; check one event per action.
+- New visit: no `gtag/js?id=AW-…` request before Marketing permission.
+- Reject optional: no Ads or GTM measurement tags.
+- Statistics only: Ads blocked; GTM analytics only if configured.
+- Marketing only: Ads tag loads; phone / email / WhatsApp conversions fire on click.
+- Withdraw all after tags loaded and confirm the reload.
 - Confirm no names, phone numbers, emails or messages in analytics payloads.
 - Check refresh/direct access and viewport sizes 360, 768, 1440 pixels.
-
-Real Google accounts and delivery integrations have not been tested without your IDs and credentials.
 
 ## Deploy on Vercel
 

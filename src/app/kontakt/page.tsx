@@ -2,7 +2,7 @@ import { MapPin, Mail, Clock3, ArrowUpRight, Phone, Building2 } from "lucide-rea
 import Link from "next/link";
 import { pageMetadata } from "@/lib/seo";
 import { Breadcrumb, Eyebrow } from "@/components/sections";
-import { PhoneButton } from "@/components/actions";
+import { EmailLink, PhoneButton, PhoneLink } from "@/components/actions";
 import { ContactForm } from "@/components/contact-form";
 import { contactReady, phoneHref, site } from "@/config/site";
 
@@ -75,7 +75,7 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                   <Phone size={21} />
                   <span>
                     <strong>Telefon</strong>
-                    <a href={phoneHref}>{site.phone}</a>
+                    <PhoneLink location="contact-page">{site.phone}</PhoneLink>
                     <small>Anruf oder WhatsApp – wir freuen uns auf Ihre Nachricht.</small>
                   </span>
                 </div>
@@ -85,7 +85,9 @@ export default async function ContactPage({ searchParams }: { searchParams: Prom
                   <Mail size={21} />
                   <span>
                     <strong>E-Mail</strong>
-                    <a href={"mailto:" + site.email}>{site.email}</a>
+                    <EmailLink location="contact-page" href={"mailto:" + site.email}>
+                      {site.email}
+                    </EmailLink>
                   </span>
                 </div>
               )}
