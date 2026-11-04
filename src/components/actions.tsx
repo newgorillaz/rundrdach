@@ -29,30 +29,35 @@ export function QuoteButton({
 
 export function PhoneButton({ location = "content", className = "" }: { location?: string; className?: string }) {
   // Renders only when a validated phone number exists in site config.
-  return phoneHref ? (
+  if (!phoneHref) return null;
+  // Local string so the onClick closure is not typed as string | null.
+  const href = phoneHref;
+  return (
     <a
       className={"button button-outline " + className}
-      href={phoneHref}
+      href={href}
       onClick={(event) => {
         trackEvent("phone_click", { cta_location: location });
-        reportAdsConversion("phone", phoneHref, event);
+        reportAdsConversion("phone", href, event);
       }}
     >
       <Phone size={16} /> {site.phone}
     </a>
-  ) : null;
+  );
 }
 
 /** Outline mailto CTA — opens the visitor's mail client with a pre-filled subject. */
 export function EmailButton({ location = "content", className = "" }: { location?: string; className?: string }) {
   if (!mailtoHref) return null;
+  // Local string so the onClick closure is not typed as string | null.
+  const href = mailtoHref;
   return (
     <a
       className={"button button-outline " + className}
-      href={mailtoHref}
+      href={href}
       onClick={(event) => {
         trackEvent("email_click", { cta_location: location });
-        reportAdsConversion("email", mailtoHref, event);
+        reportAdsConversion("email", href, event);
       }}
     >
       <Mail size={16} /> E-Mail schreiben
@@ -73,14 +78,16 @@ export function PhoneLink({
   onClick?: () => void;
 }) {
   if (!phoneHref) return null;
+  // Local string so the onClick closure is not typed as string | null.
+  const href = phoneHref;
   return (
     <a
       className={className}
-      href={phoneHref}
+      href={href}
       onClick={(event) => {
         trackEvent("phone_click", { cta_location: location });
         onClick?.();
-        reportAdsConversion("phone", phoneHref, event);
+        reportAdsConversion("phone", href, event);
       }}
     >
       {children ?? site.phone}
@@ -152,15 +159,17 @@ export function WhatsAppButton() {
 /** Fixed floating mailto CTA — stacked above WhatsApp in the shared actions column. */
 export function FloatingEmailButton() {
   if (!mailtoHref) return null;
+  // Local string so the onClick closure is not typed as string | null.
+  const href = mailtoHref;
   return (
     <a
       className="floating-email"
-      href={mailtoHref}
+      href={href}
       aria-label="E-Mail: Rundrdach kontaktieren"
       title="E-Mail"
       onClick={(event) => {
         trackEvent("email_click", { cta_location: "floating" });
-        reportAdsConversion("email", mailtoHref, event);
+        reportAdsConversion("email", href, event);
       }}
     >
       <Mail size={22} strokeWidth={1.8} aria-hidden="true" />
